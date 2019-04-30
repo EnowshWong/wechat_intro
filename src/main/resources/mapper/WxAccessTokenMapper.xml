@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wx.test.mapper.WxAccessTokenMapper" >
+  <resultMap id="BaseResultMap" type="com.wx.test.pojo.WxAccessToken" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="access_token" property="accessToken" jdbcType="VARCHAR" />
+    <result column="expires_in" property="expiresIn" jdbcType="BIGINT" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, access_token, expires_in, created
+  </sql>
+  <select id="getUpdateAccessToken" resultMap="BaseResultMap">
+    	SELECT
+	*
+FROM
+	wx_access_token
+HAVING
+	wx_access_token.created = ( SELECT MAX( wx_access_token.created ) FROM wx_access_token )
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wx.test.pojo.WxAccessTokenExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from wx_access_token
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from wx_access_token
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from wx_access_token
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wx.test.pojo.WxAccessTokenExample" >
+    delete from wx_access_token
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wx.test.pojo.WxAccessToken" >
+    insert into wx_access_token (id, access_token, expires_in, 
+      created)
+    values (#{id,jdbcType=BIGINT}, #{accessToken,jdbcType=VARCHAR}, #{expiresIn,jdbcType=BIGINT}, 
+      #{created,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wx.test.pojo.WxAccessToken" >
+    insert into wx_access_token
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="accessToken != null" >
+        access_token,
+      </if>
+      <if test="expiresIn != null" >
+        expires_in,
+      </if>
+      <if test="created != null" >
+        created,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="accessToken != null" >
+        #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresIn != null" >
+        #{expiresIn,jdbcType=BIGINT},
+      </if>
+      <if test="created != null" >
+        #{created,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wx.test.pojo.WxAccessTokenExample" resultType="java.lang.Integer" >
+    select count(*) from wx_access_token
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update wx_access_token
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.accessToken != null" >
+        access_token = #{record.accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.expiresIn != null" >
+        expires_in = #{record.expiresIn,jdbcType=BIGINT},
+      </if>
+      <if test="record.created != null" >
+        created = #{record.created,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update wx_access_token
+    set id = #{record.id,jdbcType=BIGINT},
+      access_token = #{record.accessToken,jdbcType=VARCHAR},
+      expires_in = #{record.expiresIn,jdbcType=BIGINT},
+      created = #{record.created,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wx.test.pojo.WxAccessToken" >
+    update wx_access_token
+    <set >
+      <if test="accessToken != null" >
+        access_token = #{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expiresIn != null" >
+        expires_in = #{expiresIn,jdbcType=BIGINT},
+      </if>
+      <if test="created != null" >
+        created = #{created,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wx.test.pojo.WxAccessToken" >
+    update wx_access_token
+    set access_token = #{accessToken,jdbcType=VARCHAR},
+      expires_in = #{expiresIn,jdbcType=BIGINT},
+      created = #{created,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
